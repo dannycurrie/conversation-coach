@@ -20,24 +20,32 @@ const apiKey = import.meta.env.VITE_OPENAI_API_KEY
 export async function evaluateConversation(
   transcript: ConversationTranscript,
   scenarioDescription: string,
+  feedbackAreas?: string[],
 ): Promise<EvaluationResult> {
-  return evaluateWithOpenAI(transcript, scenarioDescription)
+  return evaluateWithOpenAI(transcript, scenarioDescription, feedbackAreas)
 }
 
 async function evaluateWithOpenAI(
   transcript: ConversationTranscript,
   scenarioDescription: string,
+  feedbackAreas?: string[],
 ): Promise<EvaluationResult> {
 
     if (!apiKey) {
       throw new Error('OpenAI API key is not set')
     }
 
+    let feedbackAreasText = ''
+    if (feedbackAreas && feedbackAreas.length > 0) {
+      const areasList = feedbackAreas.map((area, idx) => `${idx + 1}. ${area}`).join('\n')
+      feedbackAreasText = `\n\nSPECIFIC AREAS FOR FEEDBACK:\n${areasList}\n\nPlease pay special attention to these areas when providing feedback.`
+    }
+
     const prompt = `
 You are an expert communication and leadership coach. Please evaluate this conversation transcript and provide detailed feedback for the leader. You are given a scenario description of the conversation and a transcript of the conversation - evaluate how well the leader is performaing relative to the stated goal of the conversation.
 
 SCENARIO DESCRIPTION:
-${scenarioDescription}
+${scenarioDescription}${feedbackAreasText}
 
 TRANSCRIPT:
 ${transcript.messages.map(msg => `${msg.speaker === 'user' ? 'You' : 'Agent'}: ${msg.text}`).join('\n')}
@@ -65,11 +73,11 @@ Format your response as JSON:
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-4',
+      model: 'gpt-4.1-mini',
       messages: [
         {
           role: 'system',
-          content: 'You are an expert communication coach. Analyze conversation transcripts and provide detailed feedback on communication skills.'
+          content: 'You are an expert communication coach. Analyze conversation transcripts and provide detailed feedback on communication skills. The transcript is provided in the format of a list of messages, each with a speaker and a timestamp.'
         },
         {
           role: 'user',

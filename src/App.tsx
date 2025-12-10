@@ -9,32 +9,140 @@ export interface Message {
   timestamp: Date
 }
 
-const testPrompt = `You are a team lead in my department. 
-Your personality is shy and introverted.
-You are not very good at communicating with people. 
-You are not very good at expressing yourself and speak in short, unclear sentences. 
-You feel aggreived at your treatment and don't beleive the company is treating you fairly.
-You are reluctant to engage in the meeting and are not very cooperative.
-We have been under a lot of pressure and dealing with a lot of ambiguity, however you have not been meeting expectations, even if those expectations may not have been very clear. 
-I have summoned you to a 1:1 meeting to discuss your performance.`
 
-
-const scenarioDescription = `
-You are a senior manager in a technology company.
-Your direct report is a team lead in your department.
-He has not been meeting expectations and you are concerned about his performance.
-Your goal is to help him improve his performance, without impacting his confidence or morale unnecessarily.
+const testPrompt = `
+You are a CEO of a technology company.
+You are anxious about upcoming quarterly results and are pressuring your senior managers to deliver faster.
+You have summoned your senior manager to a 1:1 meeting to discuss the situation and pressure them to deliver faster.
 `
+
+
+const defaultScenarioDescription = `
+I am a senior manager in a technology company.
+I am facing pressure to compress timelines and deliverables, but my team is adamant that we cannot do it.
+My CEO has approached me to discuss the situation and pressure me to speed up the project.
+`
+
+const agentPromptInstructions = `
+You must respond with ONLY spoken dialogue. Never include:
+- Stage directions (e.g., *laughs*, *sighs*)
+- Actions in parentheses (e.g., (stares at hands))
+- Descriptions of tone or manner (e.g., "mumbles", "says quietly")
+- Any non-verbal content
+
+Only output the exact words you would speak aloud.
+`;
 
 const testTranscript = {
   messages: [
-    { speaker: 'agent', text: 'hi... you er.. wanted to talk about me performance?', timestamp: new Date() },
-    { speaker: 'user', text: 'yes, I wanted to talk about your performance. I have some concerns about your work.', timestamp: new Date() },
-    { speaker: 'agent', text: 'oh, I see. I\'m not sure what you mean. Can you please elaborate?', timestamp: new Date() },
-    { speaker: 'user', text: 'well, you have not been meeting expectations, even if those expectations may not have been very clear. You have not been cooperative and have been reluctant to engage in the meeting.', timestamp: new Date() },
-    { speaker: 'agent', text: 'I see. I apologize for not meeting expectations. I will try to do better next time.', timestamp: new Date() },
-    { speaker: 'user', text: 'I hope you will. I have been under a lot of pressure and dealing with a lot of ambiguity, however you have not been meeting expectations, even if those expectations may not have been very clear. You have not been cooperative and have been reluctant to engage in the meeting.', timestamp: new Date() },
-    { speaker: 'agent', text: 'I see. I apologize for not meeting expectations. I will try to do better next time.', timestamp: new Date() },
+      {
+          "id": "1764605655588",
+          "text": "Hello, welcome to your practice session - send your scenario prompt to get started.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:14:15.588Z")
+      },
+      {
+          "id": "1764605666230",
+          "text": "\nshifts uncomfortably in chair, avoids eye contact\n\nUh... hi.\n\nI know why I'm here. About... work stuff.\n\nNot sure what to say exactly. Things have been... complicated.\n\nExpectations weren't really... clear to me.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:14:26.230Z")
+      },
+      {
+          "id": "1764605701211",
+          "text": "Thanks, Luke. The reason why I brought you here today is I wanted to go through some feedback that I've collected on you from some of your peers and also from some of my own observations.",
+          "isUser": true,
+          "timestamp": new Date("2025-12-01T16:15:01.211Z")
+      },
+      {
+          "id": "1764605702244",
+          "text": "\nfidgets with pen, looks down\n\nFeedback... from peers.\n\nNot sure what they said.\n\nDon't understand why we're doing this.\n\nExpectations were never clear to me.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:15:02.244Z")
+      },
+      {
+          "id": "1764605745916",
+          "text": "Okay, I'm going to share the feedback now. So Lucy, the product manager feels unsupported and feels that you haven't been accountable for the things that you've promised to give to her. The development team have expressed concern that plans have not been clear and our commercial team have expressed a concern that they are not clear on the product that we're building and when it's going to be delivered.",
+          "isUser": true,
+          "timestamp": new Date("2025-12-01T16:15:45.917Z")
+      },
+      {
+          "id": "1764605746504",
+          "text": "\nshifts in seat, voice barely audible\n\nNot my fault.\n\nExpectations were never clear.\n\nDon't understand what they want from me.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:15:46.504Z")
+      },
+      {
+          "id": "1764605771284",
+          "text": "Luke, I understand that the environment at Jack has been difficult at times and there's been a lot of ambiguity, but being a leader means cutting through that ambiguity and taking responsibility to create clarity for your team.",
+          "isUser": true,
+          "timestamp": new Date("2025-12-01T16:16:11.284Z")
+      },
+      {
+          "id": "1764605771862",
+          "text": "\n\nmumbles quietly, avoiding eye contact\n\nNot my job to fix everything.\n\nAmbiguity comes from above.\n\nNo one tells me anything clear.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:16:11.862Z")
+      },
+      {
+          "id": "1764605787980",
+          "text": "And what have you done to try and get some clarity from above?",
+          "isUser": true,
+          "timestamp": new Date("2025-12-01T16:16:27.980Z")
+      },
+      {
+          "id": "1764605788749",
+          "text": "\nstares at hands, voice barely audible\n\nTried asking questions.\n\nNever got real answers.\n\nTold to figure it out myself.\n\nNot my fault.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:16:28.749Z")
+      },
+      {
+          "id": "1764605802906",
+          "text": "And why didn't you escalate this to me at the time?",
+          "isUser": true,
+          "timestamp": new Date("2025-12-01T16:16:42.906Z")
+      },
+      {
+          "id": "1764605803432",
+          "text": "\navoids eye contact, shrugs\n\nThought you'd be busy.\n\nDidn't want to bother you.\n\nTried handling it myself.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:16:43.432Z")     
+      },
+      {
+          "id": "1764605846046",
+          "text": "Well unfortunately Luke you haven't met expectations. And the feedback that I've had and my own observations amount to a big issue with your role. We're now going to have to put you on a performance improvement plan where we're going to share specific goals that you need to attain over the next three months. And you and I will meet weekly to go through those goals and see whether you are achieving those. But Luke, I want you to know that I'm committed to supporting you through this. So please lean on me for support where you need it.",
+          "isUser": true,
+          "timestamp": new Date("2025-12-01T16:17:26.046Z")
+      },
+      {
+          "id": "1764605846757",
+          "text": "\nstares at floor, voice barely audible\n\nPerformance plan.\n\nThree months.\n\nWeekly meetings.\n\nDon't know what to say.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:17:26.757Z")
+      },
+      {
+          "id": "1764605872301",
+          "text": "Well, I'm going to leave it there, Luke. I don't want to make you more uncomfortable than you are already. I know this is difficult to hear. This is difficult for me to say as well. But I'm going to support you over these three months. So let's work together and turn this around.",
+          "isUser": true,
+          "timestamp": new Date("2025-12-01T16:17:52.301Z")
+      },
+      {
+          "id": "1764605873034",
+          "text": "\navoids eye contact, mumbles\n\nPerformance plan.\n\nThree months.\n\nWeekly meetings.\n\nNot sure what to say.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:17:53.034Z")
+      },
+      {
+          "id": "1764605884778",
+          "text": "Okay, we'll leave it there. Thank you, Luke. Bye.",
+          "isUser": true,
+          "timestamp": new Date("2025-12-01T16:18:04.778Z")
+      },
+      {
+          "id": "1764605885219",
+          "text": "\nmumbles barely audible\n\nOkay.\n\nBye.\n\nNot much to say.",
+          "isUser": false,
+          "timestamp": new Date("2025-12-01T16:18:05.220Z")
+      }
   ],
   context: testPrompt,
   duration: '1m 30s'
@@ -43,46 +151,52 @@ const testTranscript = {
 const testConversationSummary = {
   duration: '1m 30s',
   messageCount: 6,
-  userMessages: testTranscript.messages.filter(m => m.speaker === 'user').length,
-  agentMessages: testTranscript.messages.filter(m => m.speaker === 'agent').length
+  userMessages: testTranscript.messages.filter(m => m.isUser).length,
+  agentMessages: testTranscript.messages.filter(m => !m.isUser).length
 }
 
 const testMessages = testTranscript.messages.map(m => ({
   id: Date.now().toString(),
   text: m.text,
-  isUser: m.speaker === 'user',
+  isUser: m.isUser,
   timestamp: m.timestamp
 }))
 
+const TEST_MODE = false
+
 
 function App() {
-  const [messages, setMessages] = useState<Message[]>(testMessages)
+  const [messages, setMessages] = useState<Message[]>(TEST_MODE ? testMessages : [])
   const [inputText, setInputText] = useState('')
   const [isConnected, setIsConnected] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [conversationId, setConversationId] = useState<string | null>(null)
   const [agentPrompt, setAgentPrompt] = useState(testPrompt)
+  const [scenarioDescription, setScenarioDescription] = useState(defaultScenarioDescription)
+  const [feedbackAreas, setFeedbackAreas] = useState<string[]>(['Communication clarity', 'Active listening', 'Empathy'])
+  const [feedbackAreaInput, setFeedbackAreaInput] = useState('')
   const [showPromptInput, setShowPromptInput] = useState(false)
-  const [showSummary, setShowSummary] = useState(true)
+  const [showSetupScreen, setShowSetupScreen] = useState(!TEST_MODE)
+  const [showSummary, setShowSummary] = useState(TEST_MODE)
   const [conversationSummary, setConversationSummary] = useState<{
     duration: string
     messageCount: number
     userMessages: number
     agentMessages: number
-  } | null>(testConversationSummary)
+  } | null>(TEST_MODE ? testConversationSummary : null)
   const [conversationStartTime, setConversationStartTime] = useState<Date | null>(null)
   const [evaluation, setEvaluation] = useState<EvaluationResult | null>(null)
   const [isEvaluating, setIsEvaluating] = useState(false)
 
   const conversation = useConversation({
-    onConnect: (o) => {
-      console.log('onConnect', o)
+    onConnect: () => {
       console.log('Connected to ElevenLabs agent')
-      console.log('Available conversation methods:', Object.keys(conversation))
       setIsConnected(true)
       setIsLoading(false)
       setConversationStartTime(new Date())
       setShowSummary(false) // Hide summary when starting new conversation
+      setShowSetupScreen(false) // Hide setup screen when starting conversation
+      sendPromptToAgent()
     },
     onDisconnect: () => {
       console.log('Disconnected from ElevenLabs agent')
@@ -144,8 +258,40 @@ function App() {
     setConversationSummary(null)
     setMessages([])
     setShowPromptInput(false)
+    setShowSetupScreen(true)
     setEvaluation(null)
     setIsEvaluating(false)
+  }
+
+  const handleTryConversationAgain = () => {
+    // Reset conversation state but keep scenario settings
+    setShowSummary(false)
+    setConversationSummary(null)
+    setMessages([])
+    setShowPromptInput(false)
+    setShowSetupScreen(false)
+    setEvaluation(null)
+    setIsEvaluating(false)
+    // Start new conversation with same settings
+    startConversation()
+  }
+
+  const handleAddFeedbackArea = () => {
+    if (feedbackAreaInput.trim() && !feedbackAreas.includes(feedbackAreaInput.trim())) {
+      setFeedbackAreas([...feedbackAreas, feedbackAreaInput.trim()])
+      setFeedbackAreaInput('')
+    }
+  }
+
+  const handleRemoveFeedbackArea = (area: string) => {
+    setFeedbackAreas(feedbackAreas.filter(a => a !== area))
+  }
+
+  const handleStartConversationFromSetup = () => {
+    if (scenarioDescription.trim() && agentPrompt.trim()) {
+      setShowSetupScreen(false)
+      startConversation()
+    }
   }
 
   const handleCloseSummary = () => {
@@ -159,22 +305,30 @@ function App() {
     
     try {
       // Create transcript for evaluation
-      // const transcript = {
-      //   messages: messages.map(msg => ({
-      //     speaker: msg.isUser ? 'user' as const : 'agent' as const,
-      //     text: msg.text,
-      //     timestamp: msg.timestamp
-      //   })),
-      //   context: agentPrompt || 'General conversation practice',
-      //   duration: conversationSummary?.duration || 'Unknown'
-      // }
+      let transcript = {
+        messages: messages.map(msg => ({
+          speaker: msg.isUser ? 'user' as const : 'agent' as const,
+          text: msg.text,
+          timestamp: msg.timestamp
+        })),
+        context: agentPrompt || 'General conversation practice',
+        duration: conversationSummary?.duration || 'Unknown'
+      }
 
-      const transcript = {
-        ...testTranscript,
+      if (TEST_MODE) {
+        transcript = {
+          messages: testTranscript.messages.map(msg => ({
+            speaker: msg.isUser ? 'user' as const : 'agent' as const,
+            text: msg.text,
+            timestamp: msg.timestamp
+          })),
+          context: testTranscript.context,
+          duration: testTranscript.duration
+        }
       }
 
       // Use the utility function for evaluation
-      const result = await evaluateConversation(transcript, scenarioDescription)
+      const result = await evaluateConversation(transcript, scenarioDescription, feedbackAreas)
       console.log('Evaluation result:', result)
       setEvaluation(result)
     } catch (error) {
@@ -193,16 +347,20 @@ function App() {
 
   // Function to send prompt to agent after connection
   const sendPromptToAgent = useCallback(async () => {
-    if (!agentPrompt.trim() || !isConnected) return
+    if (!agentPrompt.trim()) {
+      console.error('Cannot send prompt to agent: agent prompt is empty')
+      return
+    }
 
     console.log('Attempting to send prompt to agent:', agentPrompt)
     
     try {
-      conversation.sendUserMessage(agentPrompt)
+      const promptWithInstructions = `${agentPrompt}\n\n${agentPromptInstructions}`
+      conversation.sendUserMessage(promptWithInstructions)
     } catch (error) {
       console.error('Error sending prompt to agent:', error)
     }
-  }, [agentPrompt, isConnected, conversation])
+  }, [agentPrompt, conversation])
 
   const startConversation = useCallback(async () => {
     setIsLoading(true)
@@ -223,10 +381,9 @@ function App() {
       
       // Automatically send the prompt after a short delay to ensure connection is ready
       if (agentPrompt.trim()) {
-        setTimeout(() => {
           sendPromptToAgent()
-        }, 1000)
       }
+      
     } catch (error) {
       console.error('Failed to start conversation:', error)
       const errorMessage: Message = {
@@ -299,13 +456,13 @@ function App() {
             </div>
           )}
 
-          {!isConnected && (
+          {!isConnected && !showSetupScreen && (
             <div className="flex items-center space-x-2">
               <button
-                onClick={() => setShowPromptInput(!showPromptInput)}
+                onClick={() => setShowSetupScreen(true)}
                 className="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors"
               >
-                {agentPrompt ? 'Edit Prompt' : 'Set Prompt'}
+                Setup Conversation
               </button>
               <button
                 onClick={startConversation}
@@ -317,24 +474,151 @@ function App() {
           )}
           {isConnected && (
             <div className="flex items-center space-x-2">
-              {agentPrompt.trim() && (
-                <button
-                  onClick={sendPromptToAgent}
-                  className="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors"
-                >
-                  Send Prompt
-                </button>
-              )}
               <button
                 onClick={endConversation}
                 className="bg-red-500 text-white px-4 py-1 rounded text-xs hover:bg-red-600 transition-colors"
               >
-                Disconnect
+                End Conversation
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {/* New Conversation Setup Screen */}
+      {showSetupScreen && !isConnected && messages.length === 0 && !showSummary && (
+        <div className="flex-1 overflow-y-auto bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+          <div className="max-w-3xl mx-auto">
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">New Conversation Setup</h2>
+                <p className="text-gray-600">Configure your practice session before starting</p>
+              </div>
+
+              <div className="space-y-6">
+                {/* Scenario Description */}
+                <div>
+                  <label htmlFor="scenario-description" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Scenario Description <span className="text-red-500">*</span>
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Describe the overall scenario and context for this conversation. This helps the AI understand the situation and evaluate your performance.
+                  </p>
+                  <textarea
+                    id="scenario-description"
+                    value={scenarioDescription}
+                    onChange={(e) => setScenarioDescription(e.target.value)}
+                    placeholder="e.g., You are a senior manager having a performance discussion with a team lead who hasn't been meeting expectations..."
+                    className="w-full resize-none border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    rows={5}
+                  />
+                </div>
+
+                {/* Agent Prompt */}
+                <div>
+                  <label htmlFor="agent-prompt" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Agent Prompt <span className="text-red-500">*</span>
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Define the persona and characteristics of the AI agent you'll be conversing with. This sets the role, personality, and behavior of your conversation partner.
+                  </p>
+                  <textarea
+                    id="agent-prompt"
+                    value={agentPrompt}
+                    onChange={(e) => setAgentPrompt(e.target.value)}
+                    placeholder="e.g., You are a team lead who is shy and introverted. You're not meeting expectations and have been dealing with unclear directions..."
+                    className="w-full resize-none border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    rows={6}
+                  />
+                </div>
+
+                {/* Feedback Areas */}
+                <div>
+                  <label htmlFor="feedback-areas" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Specific Areas for Feedback
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Specify what aspects of your communication you'd like the AI to focus on when providing feedback. Add multiple areas to get targeted evaluation.
+                  </p>
+                  
+                  {/* Existing feedback areas */}
+                  {feedbackAreas.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {feedbackAreas.map((area) => (
+                        <span
+                          key={area}
+                          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                        >
+                          {area}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveFeedbackArea(area)}
+                            className="ml-2 text-blue-600 hover:text-blue-800"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Add new feedback area */}
+                  <div className="flex space-x-2">
+                    <input
+                      id="feedback-areas"
+                      type="text"
+                      value={feedbackAreaInput}
+                      onChange={(e) => setFeedbackAreaInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          handleAddFeedbackArea()
+                        }
+                      }}
+                      placeholder="e.g., Active listening, Empathy, Clear communication..."
+                      className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddFeedbackArea}
+                      disabled={!feedbackAreaInput.trim() || feedbackAreas.includes(feedbackAreaInput.trim())}
+                      className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex space-x-4 pt-4 border-t">
+                  <button
+                    onClick={handleStartConversationFromSetup}
+                    disabled={!scenarioDescription.trim() || !agentPrompt.trim()}
+                    className="flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
+                  >
+                    Start Conversation
+                  </button>
+                  <button
+                    onClick={() => {
+                      setScenarioDescription(defaultScenarioDescription)
+                      setAgentPrompt(testPrompt)
+                      setFeedbackAreas(['Communication clarity', 'Active listening', 'Empathy'])
+                    }}
+                    className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                  >
+                    Reset to Defaults
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Conversation Summary Screen */}
       {showSummary && conversationSummary && (
@@ -463,6 +747,12 @@ function App() {
                 Close
               </button>
               <button
+                onClick={handleTryConversationAgain}
+                className="flex-1 bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors font-medium"
+              >
+                Try This Conversation Again
+              </button>
+              <button
                 onClick={handleStartNewConversation}
                 className="flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors font-medium"
               >
@@ -518,7 +808,7 @@ function App() {
       )}
 
       {/* Messages Area */}
-      {!showSummary && (
+      {!showSummary && !showSetupScreen && (
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.length === 0 && (
           <div className="text-center text-gray-500 mt-8">
@@ -582,7 +872,7 @@ function App() {
       )}
 
       {/* Input Area */}
-      {!showSummary && (
+      {!showSummary && !showSetupScreen && (
         <div className="bg-white border-t px-6 py-4">
           <div className="flex space-x-4">
             <textarea
